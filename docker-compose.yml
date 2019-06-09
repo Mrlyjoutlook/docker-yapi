@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  mongodb:
+    image: mongo:3.4
+    volumes:
+      - "./data/db:/data/db"
+    ports:
+      - 27017:27017
+    networks:
+      - yapi
+    restart: always
+
+  web:
+    image: mrlian/yapi
+    volumes:
+      - "./log:/home/yapi/log"
+    command: /bin/bash wait-for-it.sh mongodb:27017 -- /bin/bash start.sh
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongodb
+    networks:
+      - yapi
+    restart: always
+
+networks:
+  yapi:

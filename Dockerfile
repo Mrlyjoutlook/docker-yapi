@@ -36,7 +36,16 @@ RUN mkdir yapi && \
 WORKDIR /home/yapi/yapi
 
 COPY start.sh ./
+
 COPY wait-for-it.sh ./
+
+USER root
+
+RUN chmod u+x wait-for-it.sh
+
+RUN chmod u+x start.sh
+
+# USER yapi
 
 RUN jq '.db.servername = "mongodb"' config_example.json > tmp.json && \
   mv tmp.json config_example.json
